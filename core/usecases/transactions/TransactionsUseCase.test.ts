@@ -56,4 +56,13 @@ describe('TransactionUseCases', () => {
             expect(transactions[2].date).toBe('2016-08-25');
         });
     });
+
+    describe('search', () => {
+        it('should return transactions that match the search term', () => {
+            const transactions = transactionUseCases.search(mockTransactions, 'Resgate');
+    
+            expect(transactions.length).toBe(1);
+            expect(transactions[0].title).toBe('Resgate');
+        });
+    });
 });

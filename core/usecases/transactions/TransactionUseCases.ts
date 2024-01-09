@@ -29,4 +29,11 @@ export default class TransactionUseCases {
             return new Date(b.date).getTime() - new Date(a.date).getTime();
         });
     }	
+
+    search(transactions: Transaction[], searchTerm: string): Transaction[] {
+        return transactions.filter(transaction => {
+            return transaction.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                transaction.description.toLowerCase().includes(searchTerm.toLowerCase());
+        });
+    }
 }
