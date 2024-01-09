@@ -87,18 +87,18 @@ export default class Transaction {
 		return this._date;
 	}
 
-set date(value: string) {
-    if (value === '') {
-        throw new Error('Property date cannot be empty');
-    }
+	set date(value: string) {
+		if (value === '') {
+			throw new Error('Property date cannot be empty');
+		}
 
-    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-    if (!dateRegex.test(value)) {
-        throw new Error('Invalid date format. Expected format: YYYY-MM-DD');
-    }
+		const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+		if (!dateRegex.test(value)) {
+			throw new Error('Invalid date format. Expected format: YYYY-MM-DD');
+		}
 
-    this._date = value;
-}
+		this._date = value;
+	}
 	get from(): string {
 		return this._from;
 	}

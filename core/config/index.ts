@@ -1,0 +1,1 @@
+export const baseURL = 'HTTP://localhost:3000';
