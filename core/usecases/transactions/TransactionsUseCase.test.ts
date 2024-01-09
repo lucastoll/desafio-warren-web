@@ -46,4 +46,14 @@ describe('TransactionUseCases', () => {
             }).toThrowError('Status must be created, processing or processed');
         });
     })
+
+    describe('filterByDate', () => {
+        it('should return transactions sorted by date', () => {
+            const transactions = transactionUseCases.filterByDate(mockTransactions);
+    
+            expect(transactions[0].date).toBe('2018-12-22');
+            expect(transactions[1].date).toBe('2017-07-23');
+            expect(transactions[2].date).toBe('2016-08-25');
+        });
+    });
 });

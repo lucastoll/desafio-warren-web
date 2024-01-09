@@ -23,4 +23,10 @@ export default class TransactionUseCases {
 
         return transactions.filter(transaction => transaction.status === status);
     }
+
+    filterByDate(transactions: Transaction[]): Transaction[] {
+        return transactions.sort((a, b) => {
+            return new Date(b.date).getTime() - new Date(a.date).getTime();
+        });
+    }	
 }
