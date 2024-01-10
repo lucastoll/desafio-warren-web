@@ -2,12 +2,13 @@ import TransactionUseCases from './TransactionUseCases';
 import { mockTransactions } from '../mocks/mockTransactions';
 import nock from 'nock';
 import { baseURL } from '../../config';
+import { ApiTransactionGateway } from '../../gateways/transactions/TransactionGateway';
 
 describe('TransactionUseCases', () => {
 	let transactionUseCases: TransactionUseCases;
 
 	beforeEach(() => {
-		transactionUseCases = new TransactionUseCases();
+		transactionUseCases = new TransactionUseCases(new ApiTransactionGateway());
 	});
 
 	describe('get', () => {

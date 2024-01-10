@@ -1,29 +1,17 @@
-import axios, { AxiosError } from 'axios';
 import Transaction from '../../entities/transactions/transactions';
-import { baseURL } from '../../config';
-
-const api = axios.create({
-	baseURL: baseURL,
-});
+import { ITransactionGateway } from '../../gateways/transactions/TransactionGateway';
 
 export default class TransactionUseCases {
-	async get(): Promise<Transaction[]> {
-		try {
-			const response = await api.get('/transactions');
-			return response.data;
-		} catch (error: any) {
-			throw new Error(`HTTP error! status: ${error.response?.status}`);
-		}
-	}
+	constructor(private transactionGateway: ITransactionGateway) {}
 
-	async getById(id: string): Promise<Transaction[]> {
-		try {
-			const response = await api.get(`/transactions/${id}`);
-			return response.data;
-		} catch (error: any) {
-			throw new Error(`HTTP error! status: ${error.response.status}`);
-		}
-	}
+    async get(): Promise<Transaction[]> {
+        return this.transactionGateway.getTransactions();
+    }
+
+    async getById(id: string): Promise<Transaction> {
+        return this.transactionGateway.getTransactionById(id);
+    }
+
 
 	filterByStatus(transactions: Transaction[], status: string): Transaction[] {
 		if (status != 'created' && status != 'processing' && status != 'processed') {
