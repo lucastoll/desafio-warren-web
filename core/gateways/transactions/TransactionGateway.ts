@@ -12,6 +12,8 @@ export interface ITransactionGateway {
 }
 
 export class ApiTransactionGateway implements ITransactionGateway {
+	constructor(){}
+
 	async getTransactions(): Promise<Transaction[]> {
 		try {
 			const response = await api.get('/transactions');

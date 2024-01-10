@@ -6,6 +6,7 @@
 	"scripts": {
 		"test": "jest",
 		"dev": "npx json-server db.json",
+		"build": "tsc --build",
 		"format": "prettier --write ."
 	},
 	"repository": {
@@ -25,6 +26,7 @@
 		"eslint": "^8.56.0",
 		"jest": "^29.7.0",
 		"nock": "^13.4.0",
-		"prettier": "^3.1.1"
+		"prettier": "^3.1.1",
+		"typescript": "^5.3.3"
 	}
 }
