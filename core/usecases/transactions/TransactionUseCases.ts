@@ -2,10 +2,13 @@ import Transaction from '../../entities/transactions/transactions';
 import { ITransactionGateway } from '../../gateways/transactions/TransactionGateway';
 
 export default class TransactionUseCases {
+	private originalTransactions: Transaction[] = [];
+
 	constructor(private transactionGateway: ITransactionGateway) {}
 
     async get(): Promise<Transaction[]> {
-        return this.transactionGateway.getTransactions();
+		this.originalTransactions = await this.transactionGateway.getTransactions();
+        return [...this.originalTransactions];
     }
 
     async getById(id: string): Promise<Transaction> {
@@ -28,6 +31,10 @@ export default class TransactionUseCases {
 	}
 
 	search(transactions: Transaction[], searchTerm: string): Transaction[] {
+		if (searchTerm.trim() === "") {
+            return [...this.originalTransactions];
+        }
+
 		return transactions.filter(transaction => {
 			return (
 				transaction.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
