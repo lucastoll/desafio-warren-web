@@ -16,12 +16,21 @@ export default class TransactionUseCases {
     }
 
 
-	filterByStatus(transactions: Transaction[], status: string): Transaction[] {
-		if (status != 'created' && status != 'processing' && status != 'processed') {
-			throw new Error('Status must be created, processing or processed');
+	filter(transactions: Transaction[], filterBy: string): Transaction[] {
+		if (filterBy != 'created' && filterBy != 'processing' && filterBy != 'processed' && filterBy != "date" && filterBy != "none") {
+			throw new Error('Filterby must be created, processing, processed, date or none');
 		}
 
-		return transactions.filter(transaction => transaction.status === status);
+		if(filterBy == "date"){
+			return transactions.sort((a, b) => {
+				return new Date(b.date).getTime() - new Date(a.date).getTime();
+			});
+		}else if(filterBy == "none"){
+			return transactions;
+		}else{
+			return transactions.filter(transaction => transaction.status === filterBy);
+		}
+
 	}
 
 	filterByDate(transactions: Transaction[]): Transaction[] {

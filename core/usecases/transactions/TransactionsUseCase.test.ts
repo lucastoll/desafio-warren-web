@@ -36,31 +36,30 @@ describe('TransactionUseCases', () => {
 		});
 	});
 
-	describe('filterByStatus', () => {
+	describe('filter', () => {
 		it('should return transactions with the given status', () => {
-			const transactions = transactionUseCases.filterByStatus(mockTransactions, 'created');
+			const transactions = transactionUseCases.filter(mockTransactions, 'created');
 
 			expect(transactions.length).toBe(2);
 			expect(transactions[0].status).toBe('created');
 			expect(transactions[1].status).toBe('created');
 		});
 
-		it('should throw an error when the status is invalid', () => {
-			expect(() => {
-				transactionUseCases.filterByStatus(mockTransactions, 'invalid');
-			}).toThrowError('Status must be created, processing or processed');
-		});
-	});
-
-	describe('filterByDate', () => {
 		it('should return transactions sorted by date', () => {
-			const transactions = transactionUseCases.filterByDate(mockTransactions);
+			const transactions = transactionUseCases.filter(mockTransactions, 'date');
 
 			expect(transactions[0].date).toBe('2018-12-22');
 			expect(transactions[1].date).toBe('2017-07-23');
 			expect(transactions[2].date).toBe('2016-08-25');
 		});
+
+		it('should throw an error when the status is invalid', () => {
+			expect(() => {
+				transactionUseCases.filter(mockTransactions, 'invalid');
+			}).toThrowError('Filterby must be created, processing, processed, date or none');
+		});
 	});
+
 
 	describe('search', () => {
 		it('should return transactions that match the search term', () => {
@@ -70,4 +69,7 @@ describe('TransactionUseCases', () => {
 			expect(transactions[0].title).toBe('Resgate');
 		});
 	});
+
+
+
 });
