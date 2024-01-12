@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import * as TransactionGateway from '../../coreDist/gateways/transactions/TransactionGateway';
 import * as TransactionUseCase from '../../coreDist/usecases/transactions/TransactionUseCases';
 import Transaction from '!@/entities/transactions/transactions';
@@ -10,25 +10,36 @@ const useCase = new TransactionUseCase.default(gateway);
 const originalTransactions = ref<Transaction[]>([]);
 const transactions = ref<Transaction[]>([]);
 const searchInput = ref<string>('');
+const filterValue = ref<string>('none');
 
 onMounted(async () => {
     originalTransactions.value = await useCase.get();
     transactions.value = originalTransactions.value;
 });
 
+const applyFilters = (): void => {
+    let filteredTransactions = originalTransactions.value as Transaction[];
+    if (searchInput.value) {
+        filteredTransactions = useCase.search(filteredTransactions, searchInput.value);
+    }
+    if (filterValue.value !== 'none') {
+        filteredTransactions = useCase.filter(filteredTransactions, filterValue.value);
+    }
+    transactions.value = filteredTransactions;
+};
+
+watch(searchInput, applyFilters);
+watch(filterValue, applyFilters);
+
 const handleInputChange = (event: Event): void => {
     const target = event.target as HTMLInputElement;
     searchInput.value = target.value;
-    transactions.value = useCase.search(originalTransactions.value as Transaction[], searchInput.value);
 };
 
 const handleSelectChange = (event: Event): void => {
     const target = event.target as HTMLSelectElement;
-
-    transactions.value = useCase.filter(originalTransactions.value as Transaction[], target.value);
-}
-
-console.log(transactions.value);
+    filterValue.value = target.value;
+};
 </script>
 
 <template>
