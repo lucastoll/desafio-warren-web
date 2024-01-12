@@ -7,11 +7,26 @@ import Transaction from '!@/entities/transactions/transactions';
 const gateway = new TransactionGateway.ApiTransactionGateway();
 const useCase = new TransactionUseCase.default(gateway);
 
+const originalTransactions = ref<Transaction[]>([]);
 const transactions = ref<Transaction[]>([]);
+const searchInput = ref<string>('');
 
 onMounted(async () => {
-    transactions.value = await useCase.get();
+    originalTransactions.value = await useCase.get();
+    transactions.value = originalTransactions.value;
 });
+
+const handleInputChange = (event: Event): void => {
+    const target = event.target as HTMLInputElement;
+    searchInput.value = target.value;
+    transactions.value = useCase.search(originalTransactions.value as Transaction[], searchInput.value);
+};
+
+const handleSelectChange = (event: Event): void => {
+    const target = event.target as HTMLSelectElement;
+
+    transactions.value = useCase.filter(originalTransactions.value as Transaction[], target.value);
+}
 
 console.log(transactions.value);
 </script>
@@ -21,6 +36,16 @@ console.log(transactions.value);
         <h1 class="transactions__heading">
             Transações
         </h1>
+        <form class="transactions__filters">
+            <input @input="handleInputChange" placeholder="Pesquise por título ou descrição">
+            <select @change="handleSelectChange">
+                <option value="none">Filtrar</option>
+                <option value="date">Data</option>
+                <option value="created">Criado</option>
+                <option value="processed">Processado</option>
+                <option value="processing">Processing</option>
+            </select>
+        </form>
         <table class="transactions__table" v-if="transactions.length > 0">
             <thead>
                 <th>
@@ -35,6 +60,9 @@ console.log(transactions.value);
                 <th>
                     Valor
                 </th>
+                <th>
+                    Data
+                </th>
             </thead>
             <tbody>
                 <tr v-for="transaction in transactions" :key="transaction.id">
@@ -42,6 +70,7 @@ console.log(transactions.value);
                     <td>{{ transaction.description }}</td>
                     <td>{{ transaction.status }}</td>
                     <td>{{ transaction.amount }}</td>
+                    <td>{{ transaction.date }}</td>
                 </tr>
             </tbody>
         </table>

@@ -89,25 +89,23 @@ describe('TransactionUseCases', function () {
             });
         }); });
     });
-    describe('filterByStatus', function () {
+    describe('filter', function () {
         it('should return transactions with the given status', function () {
-            var transactions = transactionUseCases.filterByStatus(mockTransactions, 'created');
+            var transactions = transactionUseCases.filter(mockTransactions, 'created');
             expect(transactions.length).toBe(2);
             expect(transactions[0].status).toBe('created');
             expect(transactions[1].status).toBe('created');
         });
-        it('should throw an error when the status is invalid', function () {
-            expect(function () {
-                transactionUseCases.filterByStatus(mockTransactions, 'invalid');
-            }).toThrowError('Status must be created, processing or processed');
-        });
-    });
-    describe('filterByDate', function () {
         it('should return transactions sorted by date', function () {
-            var transactions = transactionUseCases.filterByDate(mockTransactions);
+            var transactions = transactionUseCases.filter(mockTransactions, 'date');
             expect(transactions[0].date).toBe('2018-12-22');
             expect(transactions[1].date).toBe('2017-07-23');
             expect(transactions[2].date).toBe('2016-08-25');
+        });
+        it('should throw an error when the status is invalid', function () {
+            expect(function () {
+                transactionUseCases.filter(mockTransactions, 'invalid');
+            }).toThrowError('Filterby must be created, processing, processed, date or none');
         });
     });
     describe('search', function () {

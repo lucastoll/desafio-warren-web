@@ -34,14 +34,32 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 var TransactionUseCases = /** @class */ (function () {
     function TransactionUseCases(transactionGateway) {
         this.transactionGateway = transactionGateway;
+        this.originalTransactions = [];
     }
     TransactionUseCases.prototype.get = function () {
         return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, this.transactionGateway.getTransactions()];
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = this;
+                        return [4 /*yield*/, this.transactionGateway.getTransactions()];
+                    case 1:
+                        _a.originalTransactions = _b.sent();
+                        return [2 /*return*/, __spreadArray([], this.originalTransactions, true)];
+                }
             });
         });
     };
@@ -52,11 +70,21 @@ var TransactionUseCases = /** @class */ (function () {
             });
         });
     };
-    TransactionUseCases.prototype.filterByStatus = function (transactions, status) {
-        if (status != 'created' && status != 'processing' && status != 'processed') {
-            throw new Error('Status must be created, processing or processed');
+    TransactionUseCases.prototype.filter = function (transactions, filterBy) {
+        if (filterBy != 'created' && filterBy != 'processing' && filterBy != 'processed' && filterBy != "date" && filterBy != "none") {
+            throw new Error('Filterby must be created, processing, processed, date or none');
         }
-        return transactions.filter(function (transaction) { return transaction.status === status; });
+        if (filterBy == "date") {
+            return transactions.sort(function (a, b) {
+                return new Date(b.date).getTime() - new Date(a.date).getTime();
+            });
+        }
+        else if (filterBy == "none") {
+            return transactions;
+        }
+        else {
+            return transactions.filter(function (transaction) { return transaction.status === filterBy; });
+        }
     };
     TransactionUseCases.prototype.filterByDate = function (transactions) {
         return transactions.sort(function (a, b) {
@@ -64,6 +92,9 @@ var TransactionUseCases = /** @class */ (function () {
         });
     };
     TransactionUseCases.prototype.search = function (transactions, searchTerm) {
+        if (searchTerm.trim() === "") {
+            return __spreadArray([], this.originalTransactions, true);
+        }
         return transactions.filter(function (transaction) {
             return (transaction.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 transaction.description.toLowerCase().includes(searchTerm.toLowerCase()));
