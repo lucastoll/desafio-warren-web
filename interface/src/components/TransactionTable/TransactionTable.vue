@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted, watch, computed, onUnmounted } from 'vue';
-import * as TransactionGateway from '../../coreDist/gateways/transactions/TransactionGateway';
-import * as TransactionUseCase from '../../coreDist/usecases/transactions/TransactionUseCases';
+import * as TransactionGateway from '../../../coreDist/gateways/transactions/TransactionGateway';
+import * as TransactionUseCase from '../../../coreDist/usecases/transactions/TransactionUseCases';
 import Transaction from '!@/entities/transactions/transactions';
+import TransactionFilters from './TransactionFilters.vue';
 
 const gateway = new TransactionGateway.ApiTransactionGateway();
 const useCase = new TransactionUseCase.default(gateway);
@@ -13,6 +14,20 @@ const searchInput = ref<string>('');
 const filterValue = ref<string>('none');
 const showModal = ref<boolean>(false);
 const modalTransaction = ref<Transaction | null>(null);
+
+const applyFilters = (): void => {
+	let filteredTransactions = originalTransactions.value as Transaction[];
+	if (searchInput.value) {
+		filteredTransactions = useCase.search(filteredTransactions, searchInput.value);
+	}
+	if (filterValue.value !== 'none') {
+		filteredTransactions = useCase.filter(filteredTransactions, filterValue.value);
+	}
+	transactions.value = filteredTransactions;
+};
+
+watch(searchInput, applyFilters);
+watch(filterValue, applyFilters);
 
 let progressValue = computed(() => {
 	if (modalTransaction.value) {
@@ -34,30 +49,6 @@ onMounted(async () => {
 	originalTransactions.value = await useCase.get();
 	transactions.value = originalTransactions.value;
 });
-
-const applyFilters = (): void => {
-	let filteredTransactions = originalTransactions.value as Transaction[];
-	if (searchInput.value) {
-		filteredTransactions = useCase.search(filteredTransactions, searchInput.value);
-	}
-	if (filterValue.value !== 'none') {
-		filteredTransactions = useCase.filter(filteredTransactions, filterValue.value);
-	}
-	transactions.value = filteredTransactions;
-};
-
-watch(searchInput, applyFilters);
-watch(filterValue, applyFilters);
-
-const handleInputChange = (event: Event): void => {
-	const target = event.target as HTMLInputElement;
-	searchInput.value = target.value;
-};
-
-const handleSelectChange = (event: Event): void => {
-	const target = event.target as HTMLSelectElement;
-	filterValue.value = target.value;
-};
 
 const handleModal = (transaction: Transaction): void => {
 	modalTransaction.value = transaction;
@@ -86,20 +77,12 @@ onUnmounted(() => {
 <template>
 	<section class="transactions">
 		<h1 class="transactions__heading">Transações</h1>
-		<form class="transactions__filters">
-			<input
-				class="transactions__filters__searchBar"
-				@input="handleInputChange"
-				placeholder="Pesquise por título ou descrição"
-			/>
-			<select class="transactions__filters__selectFilter" @change="handleSelectChange">
-				<option value="none">Filtrar</option>
-				<option value="date">Data</option>
-				<option value="created">Criado</option>
-				<option value="processed">Processado</option>
-				<option value="processing">Processing</option>
-			</select>
-		</form>
+		<TransactionFilters
+			:searchInput="searchInput"
+			:filterValue="filterValue"
+			@update:searchInput="searchInput = $event"
+			@update:filterValue="filterValue = $event"
+		/>
 		<table class="transactions__table" v-if="transactions.length > 0">
 			<thead>
 				<th>Título</th>
@@ -166,7 +149,7 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="less">
-@import '../assets/css/variables.less';
+@import '../../assets/css/variables.less';
 
 .transactions {
 	display: flex;
@@ -314,47 +297,6 @@ onUnmounted(() => {
 	color: @primary;
 }
 
-.transactions__filters {
-	display: flex;
-	flex-direction: column;
-	width: 100%;
-	justify-content: space-around;
-	align-items: center;
-	gap: 16px;
-	max-width: @screen-xl;
-	margin-bottom: 32px;
-
-	@media screen and (min-width: @screen-lg) {
-		gap: 0px;
-		flex-direction: row;
-	}
-}
-
-.transactions__filters__searchBar {
-	width: 100%;
-	max-width: 300px;
-	padding: 8px;
-	border: 1px solid @primary;
-	border-radius: 4px;
-	background-color: @secondary;
-	color: @primary;
-	font-size: 16px;
-	font-weight: bold;
-	box-sizing: border-box;
-}
-
-.transactions__filters__selectFilter {
-	width: 100%;
-	max-width: 300px;
-	padding: 8px;
-	border: 1px solid @primary;
-	border-radius: 4px;
-	background-color: @secondary;
-	color: @primary;
-	font-size: 16px;
-	font-weight: bold;
-	box-sizing: border-box;
-}
 .transactions__table {
 	border-collapse: collapse;
 	width: 100%;
