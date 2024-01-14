@@ -4,7 +4,7 @@ Esse repositório consiste na implementação de uma dashboard de transações v
 
 ![image](https://github.com/lucastoll/desafio-warren-web/assets/86172649/2504e34a-e83f-43e0-be44-6ac098398695)
 
-## Clean Architecture 🗂
+# Clean Architecture 🗂
 
 Um dos grandes aprendizados do desafio é implementar o conceito de arquitetura de software que se baseia em manter a aplicação com camadas de responsabilidades bem separadas, o clean architecture 
 
@@ -21,7 +21,7 @@ Diretório que guarda as ações que os usuários vão fazer dentro da aplicaç�
 
 Assim, tanto as classes da aplicação, a conexão com o banco e as lógicas da aplicação são feitas separadamente o que facilita a manuntenção, **testabilidade e escabilidade**. O front-end da aplicação é independente de tudo isso que esta no core, ele apenas importa o que precisa e usa.
 
-## Como rodar a aplicação ⚙
+# Como rodar a aplicação ⚙
 #### Core
 ```
 cd core
@@ -36,7 +36,7 @@ pnpm run dev
 ```
 Como a aplicação é separada em dois diretórios diferentes, elas se comunicam através de um processo de build, caso uma alteração seja feita no core, é necessário rodar o comando ```pnpm run build``` isso vai criar uma pasta com o nome de **coreDist** no front-end, com o código atualizado e compilado do core. 
 
-## Tecnologias utilizadas 💻
+# Tecnologias utilizadas 💻
 
 #### Core
 - Typescript
