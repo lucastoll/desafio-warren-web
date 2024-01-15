@@ -2,7 +2,9 @@
 
 Esse repositório consiste na implementação de uma dashboard de transações vindo de uma API, de forma que é possível buscar e filtrar as transações ao mesmo tempo, além de visualizar elas individualmente por meio de um modal.
 
-![image](https://github.com/lucastoll/desafio-warren-web/assets/86172649/2504e34a-e83f-43e0-be44-6ac098398695)
+![image](https://github.com/lucastoll/desafio-warren-web/assets/86172649/3d49bbe4-636b-43fd-9379-0a927d235f5b)
+![image](https://github.com/lucastoll/desafio-warren-web/assets/86172649/80f7813d-b676-4ede-a579-9e19bcbeb890)
+
 
 # Clean Architecture 🗂
 
