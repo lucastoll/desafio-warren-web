@@ -56,21 +56,21 @@ const handleModal = (transaction: Transaction): void => {
 };
 
 let escListener = (event: KeyboardEvent) => {
-    if (event.key === 'Escape' || event.key === 'Esc' || event.keyCode === 27) {
-        showModal.value = false;
-    }
+	if (event.key === 'Escape' || event.key === 'Esc' || event.keyCode === 27) {
+		showModal.value = false;
+	}
 };
 
-watch(showModal, (newVal) => {
-    if (newVal) {
-        window.addEventListener('keydown', escListener);
-    } else {
-        window.removeEventListener('keydown', escListener);
-    }
+watch(showModal, newVal => {
+	if (newVal) {
+		window.addEventListener('keydown', escListener);
+	} else {
+		window.removeEventListener('keydown', escListener);
+	}
 });
 
 onUnmounted(() => {
-    window.removeEventListener('keydown', escListener);
+	window.removeEventListener('keydown', escListener);
 });
 </script>
 
@@ -85,11 +85,13 @@ onUnmounted(() => {
 		/>
 		<table class="transactions__table" v-if="transactions.length > 0">
 			<thead>
-				<th>Título</th>
-				<th>Descrição</th>
-				<th>Status</th>
-				<th>Valor</th>
-				<th>Data</th>
+				<tr>
+					<th scope="col">Título</th>
+					<th scope="col">Descrição</th>
+					<th scope="col">Status</th>
+					<th scope="col">Valor</th>
+					<th scope="col">Data</th>
+				</tr>
 			</thead>
 			<tbody>
 				<tr
@@ -105,11 +107,10 @@ onUnmounted(() => {
 				</tr>
 			</tbody>
 		</table>
-		<div class="transactions__overlay" tabindex="999" v-if="showModal" @click="showModal = false" @keydown.esc="showModal = false">
+		<div class="transactions__overlay" v-if="showModal" @click="showModal = false" @keydown.esc="showModal = false">
 			<div
 				class="transactions__overlay__modal"
 				v-if="showModal && modalTransaction"
-				tabindex="-1"
 				role="dialog"
 				aria-modal="true"
 				@click.stop
@@ -122,15 +123,11 @@ onUnmounted(() => {
 						id="status-progress"
 						:value="progressValue"
 						max="100"
-						aria-labelledby="status-label"
+						aria-label="Progresso: {{ progressValue }} }}"
 					></progress>
-					<label
-						class="transactions__overlay__modal__statusBar__label"
-						id="status-label"
-						for="status-progress"
-					>
+					<div class="transactions__overlay__modal__statusBar__label">
 						<span>Criada</span><span>Processando</span><span>Concluída</span>
-					</label>
+					</div>
 				</div>
 				<h3 class="transactions__overlay__modal__fromTo">Transferindo de</h3>
 				<div class="transactions__overlay__modal__amountInformations">
@@ -142,7 +139,9 @@ onUnmounted(() => {
 					<span>{{ modalTransaction.to }}</span>
 					<span>{{ modalTransaction.amount }}</span>
 				</div>
-				<button class="transactions__overlay__modal__button" @click.stop @click="showModal = false">X</button>
+				<button z-index="1" class="transactions__overlay__modal__button" @click.stop @click="showModal = false">
+					X
+				</button>
 			</div>
 		</div>
 	</section>

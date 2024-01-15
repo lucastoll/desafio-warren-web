@@ -6,5 +6,7 @@ import TransactionTable from './components/TransactionTable/TransactionTable.vue
 
 <template>
 	<HeaderWarren />
-	<TransactionTable />
+	<main>
+		<TransactionTable />
+	</main>
 </template>

@@ -13,5 +13,8 @@
   ],
   "compilerOptions": {
     "module": "NodeNext"
-  }
+  },
+  "exclude": [
+    "../core/**/*.test.ts"
+  ]
 }

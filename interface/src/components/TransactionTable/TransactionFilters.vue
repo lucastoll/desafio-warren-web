@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, defineEmits } from 'vue';
+import { ref, watch } from 'vue';
 
 const searchInput = ref<string>('');
 const filterValue = ref<string>('none');
@@ -26,17 +26,21 @@ watch(filterValue, () => {
 
 <template>
 	<form class="transactions__filters">
+		<label for="searchInput" class="transactions__filters__label">Pesquisar:</label>
 		<input
 			class="transactions__filters__searchBar"
 			@input="handleInputChange"
 			placeholder="Pesquise por título ou descrição"
+			id="searchInput"
+			aria-label="Pesquisar"
 		/>
-		<select class="transactions__filters__selectFilter" @change="handleSelectChange">
-			<option value="none">Filtrar</option>
+		<label for="filterSelect" class="transactions__filters__label">Filtrar por:</label>
+		<select id="filterSelect" aria-label="Filtrar por" class="transactions__filters__selectFilter" @change="handleSelectChange">
+			<option value="none">Nenhum</option>
 			<option value="date">Data</option>
 			<option value="created">Criado</option>
 			<option value="processed">Processado</option>
-			<option value="processing">Processing</option>
+			<option value="processing">Processando</option>
 		</select>
 	</form>
 </template>
@@ -66,7 +70,7 @@ watch(filterValue, () => {
 	border: 1px solid @primary;
 	border-radius: 4px;
 	background-color: @secondary;
-	color: @primary;
+	color: black;
 	font-size: 16px;
 	font-weight: bold;
 	box-sizing: border-box;
@@ -79,7 +83,7 @@ watch(filterValue, () => {
 	border: 1px solid @primary;
 	border-radius: 4px;
 	background-color: @secondary;
-	color: @primary;
+	color: black;
 	font-size: 16px;
 	font-weight: bold;
 	box-sizing: border-box;
