@@ -24,13 +24,13 @@ Assim, tanto as classes da aplicação, a conexão com o banco e as lógicas da 
 # Como rodar a aplicação ⚙
 #### Core
 ```
-cd core
+cd .\core
 pnpm install
 pnpm run dev
 ```
 #### Front-end
 ```
-cd core
+cd .\interface
 pnpm install
 pnpm run dev
 ```
